@@ -68,13 +68,10 @@ for(var i = 0; i < img.length; i++){
 console.log(allImages);
 
 
-
-
 // calculating random images to display 
 var randomImages = function(){
   return Math.floor(Math.floor(Math.random() * img.length));
 }
-// console.log(randomImages);
 
 // pick random images
 var pickRandomImages = function(){
@@ -142,8 +139,10 @@ function handleClick(event){
 console.log('handle click', event.target);
 console.log(event.target.dataset.imageIndex);
 var imageClick = parseInt(event.target.dataset.imageIndex);
+console.log('what is this', imageClick);
 allImages[imageClick].clicks++;
-randomImages();
+pickRandomImages();
+// console.log('this', randomImages());
 renderRandomImages();
 totalClicks++;
 imageLikes();
