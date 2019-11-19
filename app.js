@@ -73,12 +73,11 @@ var randomImages = function(){
   return Math.floor(Math.floor(Math.random() * img.length));
 }
 
-// pick random images
+// pick random images and also take care of double images
 var pickRandomImages = function(){
 
   previousImage = [];
   var leftIndex = randomImages();
-  // var leftImageEl = allImages[leftIndex];
   var leftImage = allImages[leftIndex];
   previousImage.push(leftIndex);
 
@@ -142,7 +141,7 @@ var imageClick = parseInt(event.target.dataset.imageIndex);
 console.log('what is this', imageClick);
 allImages[imageClick].clicks++;
 pickRandomImages();
-// console.log('this', randomImages());
+console.log('this', randomImages());
 renderRandomImages();
 totalClicks++;
 imageLikes();
