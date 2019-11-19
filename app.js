@@ -13,7 +13,7 @@ var rightImagePara = document.getElementById('right-para');
 var totalClicks = 0;
 var previousImage = [];
 var allImages = [];
-
+var clickLimit = 25;
 
 // variable to store images aleady on the page
 var leftImageOnPage = null;
@@ -37,15 +37,16 @@ var img = [
   { imageSrc:'assets/pet-sweep.jpg', name:'pet-sweep'},
   { imageSrc:'assets/scissors.jpg', name:'scissors'},
   { imageSrc:'assets/shark.jpg', name:'shark'},
-  { imageSrc:'assets/sweep.jpg', name:'sweep'},
-  { imageSrc:'assets/tautaun.jpg', name:'tautaun'},
+  { imageSrc:'assets/sweep.png', name:'sweep'},
+  { imageSrc:'assets/tauntaun.jpg', name:'tauntaun'},
   { imageSrc:'assets/unicorn.jpg', name:'unicorn'},
-  { imageSrc:'assets/usb.jpg', name:'usb'},
+  { imageSrc:'assets/usb.gif', name:'usb'},
   { imageSrc:'assets/water-can.jpg', name:'water-can'},
   { imageSrc:'assets/wine-glass.jpg', name:'wine-glass'},
 
 ];
 
+// Images constructor
 var Images = function(name, imageUrl){
   this.name = name;
   this.imageSrc = imageUrl;
@@ -69,39 +70,90 @@ console.log(allImages);
 
 
 
-// calculating random images to display on the image
+// calculating random images to display 
 var randomImages = function(){
   return Math.floor(Math.floor(Math.random() * img.length));
 }
+// console.log(randomImages);
 
 // pick random images
 var pickRandomImages = function(){
+
   previousImage = [];
   var leftIndex = randomImages();
   // var leftImageEl = allImages[leftIndex];
   var leftImage = allImages[leftIndex];
-  previousImage.push(leftImage);
+  previousImage.push(leftIndex);
 
   var centerIndex = randomImages();
-  centerImage = allImages[centerIndex];
-  previousImage.push(centerImage);
+  while(centerIndex == leftIndex){
+    centerIndex = randomImages();
+  }
+  var centerImage = allImages[centerIndex];
+  previousImage.push(centerIndex);
+  console.log(centerImage);
+
+  var rightIndex = randomImages();
+  while(rightIndex == centerIndex || rightIndex == leftIndex){
+    rightIndex = randomImages();
+  } 
+  var rightImage = allImages[rightIndex];
+  previousImage.push(rightIndex);
 
 }
 
 // rendering different images
 var renderRandomImages = function(){
-  console.log('1st image', previousImage[0]);
-  console.log(leftImage);
+  // console.log('1st image', previousImage[0]);
+  // console.log(leftImage);
 var leftEl = document.getElementById('left-image');
 var centerEl = document.getElementById('center-image');
 var rightEl = document.getElementById('right-image');
-leftEl.setAttribute('src', allImages[0].imageSrc);
-  // leftImage.dataset.ImageIndex = previousImage[0];
-  centerEl.setAttribute('src', allImages[1].imageSrc);
-  rightEl.setAttribute('src', allImages[2].imageSrc);
-  leftImagePara.textContent = allImages[0].name;
-  centerImagePara.textContent = allImages[1].name;
-  rightImagePara.textContent = allImages[2].name;
+
+var leftText = document.getElementById('left-para');
+var centerText = document.getElementById('center-para');
+var rightText = document.getElementById('right-para');
+
+
+leftEl.setAttribute('src', allImages[previousImage[0]].imageSrc);
+leftText.textContent = (allImages[previousImage[0]].name);
+leftEl.dataset.imageIndex = previousImage[0];
+allImages[previousImage[0]].views++;
+
+centerEl.setAttribute('src', allImages[previousImage[1]].imageSrc);
+centerText.textContent = (allImages[previousImage[1]].name);
+centerEl.dataset.imageIndex = previousImage[1];
+allImages[previousImage[1]].views++;
+
+        
+rightEl.setAttribute('src', allImages[previousImage[2]].imageSrc);
+rightText.textContent = (allImages[previousImage[2]].name)
+rightEl.dataset.imageIndex = previousImage[2];
+allImages[previousImage[2]].views++;
+
 }
 pickRandomImages();
 renderRandomImages();
+
+// Creating an Event handler
+container.addEventListener('click', handleClick);
+
+function handleClick(event){
+console.log('handle click', event.target);
+console.log(event.target.dataset.imageIndex);
+var imageClick = parseInt(event.target.dataset.imageIndex);
+allImages[imageClick].clicks++;
+randomImages();
+renderRandomImages();
+totalClicks++;
+imageLikes();
+}
+
+// displaying the amount of likes for each image
+var imageLikes = function(){
+  if(totalClicks < clickLimit){
+    renderRandomImages();
+  } else {
+    container.removeEventListener('click', handleClick);
+  }
+}
