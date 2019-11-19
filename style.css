@@ -1,16 +1,44 @@
-
-
-img{
-  width: 200px;
-  height: 200px;
-  padding: 20px;
-  margin-left: 5px;
+*{
+  box-sizing: border-box;
 }
 
-/* #left{
+h1{
+  text-align: center;
+}
+
+img{
+  width: 300px;
+  height: 300px;
+  padding: 20px;
+  margin-left: 5px;
+  border: 1px groove grey;
+}
+
+#image{
   float: left;
   width: 30.33%;
   padding: 5px;
-}  */
+} 
+
+#main-container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
 
 
+#left-para{
+  text-align: center;
+}
+
+#center-para{
+  text-align: center;
+}
+
+#right-para{
+  text-align: center;
+}
+
+footer{
+  text-align: center;
+}
