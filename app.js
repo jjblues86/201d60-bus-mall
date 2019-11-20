@@ -153,5 +153,105 @@ var imageLikes = function(){
     renderRandomImages();
   } else {
     container.removeEventListener('click', handleClick);
+    makeChart();
+    chartData();
   }
+}
+
+
+var imageClicks = [];
+var imageViews = [];
+var imageName = [];
+
+var makeChart =  function() {
+  document.getElementById('main-container').style.display = 'none';
+  for(var i = 0; i < allImages.length; i++){
+    imageName.push(allImages[i].name);
+    imageViews.push(allImages[i].views);
+    imageClicks.push(allImages[i].clicks);
+  }
+}
+
+
+// Creating a chart
+function chartData(){
+var ctx = document.getElementById('voteChart').getContext('2d');
+
+var imageChart = new Chart(ctx, {
+  // The type of chart you want to create
+  type: 'bar',
+  data: {
+    labels: imageName,
+    datasets: [{
+      label: 'Number of Votes',
+      data: imageClicks,
+      backgroundColor: '#44448',
+    }, {
+      label: 'Number of Views',
+      data: imageViews,
+      backgroundColor: [
+      'rgb(225, 85, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      'rgb(200, 180, 40)',
+      ],
+      borderColor: [
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      'rgb(55, 150, 220)',
+      ],
+    }],
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          autoSkip: false,
+        }
+      }],
+      yAxes: [{
+        ticks: {
+          beginAtZero: true,
+        }
+      }]
+    }
+  }
+});
+
+// function chartData() {
+//   return new Chart(ctx, imageChart);
+// }
 }
