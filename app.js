@@ -15,10 +15,6 @@ var previousImage = [];
 var allImages = [];
 var clickLimit = 25;
 
-// variable to store images aleady on the page
-var leftImageOnPage = null;
-var rightImageOnPage = null;
-
 
 var img = [
   
@@ -52,13 +48,7 @@ var Images = function(name, imageUrl){
   this.imageSrc = imageUrl;
   this.clicks = 0;
   this.views = 0;
-
-  // Images.allImages.push(this);
-  // Images.previousImage.push(this);
 }
-
-// Images.previousImage = [];
-// Images.allImages = [];
 
 
 // looping through the images
@@ -77,6 +67,7 @@ var randomImages = function(){
 var pickRandomImages = function(){
 
   previousImage = [];
+
   var leftIndex = randomImages();
   var leftImage = allImages[leftIndex];
   previousImage.push(leftIndex);
@@ -100,8 +91,7 @@ var pickRandomImages = function(){
 
 // rendering different images
 var renderRandomImages = function(){
-  // console.log('1st image', previousImage[0]);
-  // console.log(leftImage);
+ 
 var leftEl = document.getElementById('left-image');
 var centerEl = document.getElementById('center-image');
 var rightEl = document.getElementById('right-image');
@@ -110,18 +100,19 @@ var leftText = document.getElementById('left-para');
 var centerText = document.getElementById('center-para');
 var rightText = document.getElementById('right-para');
 
-
+// images rendered on the left side 
 leftEl.setAttribute('src', allImages[previousImage[0]].imageSrc);
 leftText.textContent = (allImages[previousImage[0]].name);
 leftEl.dataset.imageIndex = previousImage[0];
 allImages[previousImage[0]].views++;
 
+//images rendered on in the center
 centerEl.setAttribute('src', allImages[previousImage[1]].imageSrc);
 centerText.textContent = (allImages[previousImage[1]].name);
 centerEl.dataset.imageIndex = previousImage[1];
 allImages[previousImage[1]].views++;
 
-        
+// images rendered on the right side      
 rightEl.setAttribute('src', allImages[previousImage[2]].imageSrc);
 rightText.textContent = (allImages[previousImage[2]].name)
 rightEl.dataset.imageIndex = previousImage[2];
@@ -138,10 +129,8 @@ function handleClick(event){
 console.log('handle click', event.target);
 console.log(event.target.dataset.imageIndex);
 var imageClick = parseInt(event.target.dataset.imageIndex);
-console.log('what is this', imageClick);
 allImages[imageClick].clicks++;
 pickRandomImages();
-console.log('this', randomImages());
 renderRandomImages();
 totalClicks++;
 imageLikes();
@@ -158,13 +147,14 @@ var imageLikes = function(){
   }
 }
 
-
+// global variables with empty arrays to push each category required onto the chart
 var imageClicks = [];
 var imageViews = [];
 var imageName = [];
 
+
 var makeChart =  function() {
-  document.getElementById('main-container').style.display = 'none';
+  document.getElementById('main-container').style.display = 'show';
   for(var i = 0; i < allImages.length; i++){
     imageName.push(allImages[i].name);
     imageViews.push(allImages[i].views);
@@ -177,6 +167,33 @@ var makeChart =  function() {
 function chartData(){
 var ctx = document.getElementById('voteChart').getContext('2d');
 
+// dynamically rendering the background colors of each bar chart
+var randomColor = {
+  beforeInit: function(chart) {
+    var backgroundColor = [];
+    var borderColor = [];
+
+    // loop through every data available
+    for(var i = 0; i < chart.config.data.datasets[0].data.length; i++){
+
+      // generate random color
+      var color = "rgba(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ",";
+
+      // push the new color to the background and border color arrays
+      backgroundColor.push(color + "0.2)");
+      borderColor.push(color + "1)");
+    }
+
+    // update the chart bars color properties
+    chart.config.data.datasets[0].backgroundColor = backgroundColor;
+    chart.config.data.datasets[0].borderColor = borderColor;
+
+  }
+}
+
+// register the plugin to the chart's plugin service to activate it
+Chart.pluginService.register(randomColor);
+
 var imageChart = new Chart(ctx, {
   // The type of chart you want to create
   type: 'bar',
@@ -186,53 +203,13 @@ var imageChart = new Chart(ctx, {
       label: 'Number of Votes',
       data: imageClicks,
       backgroundColor: '#44448',
+      borderWidth: 1
     }, {
       label: 'Number of Views',
       data: imageViews,
-      backgroundColor: [
-      'rgb(225, 85, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      'rgb(200, 180, 40)',
-      ],
-      borderColor: [
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      'rgb(55, 150, 220)',
-      ],
+      backgroundColor: 'rgba(48, 64, 132, 0.2',
+      borderColor: 'rgba(25, 19, 13, 1)',
+      borderWidth: 1
     }],
   },
   options: {
@@ -250,8 +227,4 @@ var imageChart = new Chart(ctx, {
     }
   }
 });
-
-// function chartData() {
-//   return new Chart(ctx, imageChart);
-// }
 }
