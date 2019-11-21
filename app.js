@@ -48,6 +48,7 @@ var Images = function(name, imageUrl){
   this.imageSrc = imageUrl;
   this.clicks = 0;
   this.views = 0;
+  // allImages.push(this);
 }
 
 
@@ -140,8 +141,17 @@ imageLikes();
 var imageLikes = function(){
   if(totalClicks < clickLimit){
     renderRandomImages();
-  } else {
+  }
+   else {
     container.removeEventListener('click', handleClick);
+    // totalClicks = JSON.parse(localStorage.getItem('totalClicks'));
+    var allImagesJson = JSON.stringify(allImages);
+    localStorage.setItem('allImages', allImagesJson);
+    localStorage.getItem('allImages')
+
+    allImagesJson = JSON.parse(localStorage.getItem('allImages'));
+
+
     makeChart();
     chartData();
   }
@@ -159,9 +169,21 @@ var makeChart =  function() {
     imageName.push(allImages[i].name);
     imageViews.push(allImages[i].views);
     imageClicks.push(allImages[i].clicks);
+    // localStorage.getItem = JSON.parse(totalClicks, allImages);
   }
 }
 
+// function to save to localstorage
+// function saveDataToLocalStorage(allImages){
+//   var imagesData = [];
+//   for(var i = 0; i < allImages.length; i++){
+//     imagesData.push(allImages[i]);
+//   }
+//   console.log(JSON.stringify(imagesData));
+//   localStorage.imagesData = JSON.stringify(imagesData);
+
+// }
+// saveDataToLocalStorage(allImages);
 
 // Creating a chart
 function chartData(){
